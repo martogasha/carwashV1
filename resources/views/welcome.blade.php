@@ -89,7 +89,7 @@
         <div class="container-fluid">
                     <div style="margin-bottom: 3em;" class="app">
                         <ul class="list" style="display: contents;">
-                            @if(isset(\Illuminate\Support\Facades\Auth::user()->car))
+                            @if(isset(\Illuminate\Support\Facades\Auth::user()->cars))
                             @if(\Illuminate\Support\Facades\Auth::user()->cars==4)
                                 <li style="display: block;">
                                     <a href="{{url('cars')}}" class="card tile text-dark">
