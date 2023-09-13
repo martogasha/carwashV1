@@ -101,6 +101,8 @@
                                 <p class="text-muted mb-0">Patient</p>
                             </div>
                         </div>
+                        <a class="dropdown-item" href="{{url('profile')}}">Profile</a>
+
                         <form action="{{url('logout')}}" method="post" id="logout">
                             @csrf
                             <a class="dropdown-item" href="javascript:document.getElementById('logout').submit();">Logout</a>
@@ -211,6 +213,11 @@
                                                                 <td>Pending</td>
 
                                                             @endif
+                                                            @if(\Illuminate\Support\Facades\Auth::user()->role==0)
+                                                                <td><a class="btn btn-sm bg-success-light del" id={{$car->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#delete_carlist">Delete</a></td>
+
+                                                            @endif
+
                                                         </tr>
                                                     @endforeach
 
@@ -235,7 +242,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Pay for: <span id="editModalTitle" style="color:red;"></span></h5>
+                <h5 class="modal-title">Pay For: <span id="editModalTitle" style="color:red;"></span></h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -311,6 +318,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade custom-modal" id="delete_carlist">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">DELETE RECORD FOR: <span id="del_title" style="color:red;"></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{url('deleteCar')}}" method="post">
+                @csrf
+                <input type="hidden" id="carId" name="carId">
+                <div class="modal-body">
+                    <button type="submit" class="btn btn-danger" id="bookButton">Delete</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script data-cfasync="false" src="https://doccure-laravel.dreamguystech.com/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/libs/jquery/jquery.min.js"></script>
 
@@ -375,6 +402,34 @@
 
         $('#editModalTitle').text(data.number_plate);
         $('#car_id').val(data.id);
+
+
+    }
+    $(document).on('click','.del',function () {
+        $value = $(this).attr('id');
+        $.ajax({
+            type:"get",
+            url:"{{url('deleteCarlist')}}",
+            data:{'id':$value},
+            success:function (data) {
+                getResp(data);
+                console.log(data);
+
+            },
+            error:function (error) {
+                console.log(error)
+                alert('error')
+
+            }
+
+        });
+    });
+    var dat;
+    function getResp(response) {
+        dat = response;
+
+        $('#del_title').text(dat.number_plate);
+        $('#carId').val(dat.id);
 
 
     }

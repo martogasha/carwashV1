@@ -101,6 +101,8 @@
                                     <p class="text-muted mb-0">Patient</p>
                             </div>
                         </div>
+                        <a class="dropdown-item" href="{{url('profile')}}">Profile</a>
+
                         <form action="{{url('logout')}}" method="post" id="logout">
                             @csrf
                             <a class="dropdown-item" href="javascript:document.getElementById('logout').submit();">Logout</a>
@@ -161,12 +163,16 @@
                                                             <td>{{$washer->first_name}} {{$washer->last_name}}</td>
                                                             <td>{{$washer->phone}}</td>
                                                             <td>{{\App\Models\Rate::first()->rate}}%</td>
-                                                            <td class="text-end">
-                                                                <div class="table-action">
-                                                                    <a class="btn btn-sm bg-success-light view" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#edit_washer">Edit</a>
+                                                            @if(\Illuminate\Support\Facades\Auth::user()->role==0)
+                                                                <td class="text-end">
+                                                                    <div class="table-action">
+                                                                        <a class="btn btn-sm bg-success-light view" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#edit_washer">Edit</a>
+                                                                        <a class="btn btn-sm bg-success-light del" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#delete_washer">Delete</a>
 
-                                                                </div>
-                                                            </td>
+                                                                    </div>
+                                                                </td>
+                                                            @endif
+
                                                         </tr>
                                                     @endforeach
 
@@ -267,6 +273,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade custom-modal" id="delete_washer">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">DELETE WASHER <span id="del_title" style="color:red;"></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{url('dWashers')}}" method="post">
+                @csrf
+                <input type="hidden" name="washerId" id="washerId">
+                <div class="modal-body">
+                    <button type="submit" class="btn btn-danger">Save</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script data-cfasync="false" src="https://doccure-laravel.dreamguystech.com/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/libs/jquery/jquery.min.js"></script>
 
@@ -335,6 +361,30 @@
         $('#last_name').val(data.last_name);
         $('#phone').val(data.phone);
         $('#editModalTitle').text(data.first_name+' '+data.last_name);
+
+    }    $(document).on('click','.del',function () {
+        $value = $(this).attr('id');
+        $.ajax({
+            type:"get",
+            url:"{{url('deleteWasher')}}",
+            data:{'id':$value},
+            success:function (data) {
+                getResp(data);
+                console.log(data);
+
+            },
+            error:function (error) {
+                console.log(error)
+                alert('error')
+
+            }
+
+        });
+    });
+
+    function getResp(data) {
+        $('#washerId').val(data.id);
+        $('#del_title').text(data.first_name);
 
     }
     $('#add_phone').on('keyup',function () {

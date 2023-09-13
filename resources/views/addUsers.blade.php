@@ -101,6 +101,8 @@
                                     <p class="text-muted mb-0">Patient</p>
                             </div>
                         </div>
+                        <a class="dropdown-item" href="{{url('profile')}}">Profile</a>
+
                         <form action="{{url('logout')}}" method="post" id="logout">
                             @csrf
                             <a class="dropdown-item" href="javascript:document.getElementById('logout').submit();">Logout</a>

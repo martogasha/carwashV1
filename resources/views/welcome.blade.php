@@ -70,6 +70,8 @@
                                     <p class="text-muted mb-0">Patient</p>
                             </div>
                         </div>
+                        <a class="dropdown-item" href="{{url('profile')}}">Profile</a>
+
                         <form action="{{url('logout')}}" method="post" id="logout">
                             @csrf
                             <a class="dropdown-item" href="javascript:document.getElementById('logout').submit();">Logout</a>
@@ -87,6 +89,7 @@
         <div class="container-fluid">
                     <div style="margin-bottom: 3em;" class="app">
                         <ul class="list" style="display: contents;">
+                            @if(isset(\Illuminate\Support\Facades\Auth::user()->car))
                             @if(\Illuminate\Support\Facades\Auth::user()->cars==4)
                                 <li style="display: block;">
                                     <a href="{{url('cars')}}" class="card tile text-dark">
@@ -98,7 +101,9 @@
                                     </a>
                                 </li>
                             @endif
+                            @endif
 
+                                @if(isset(\Illuminate\Support\Facades\Auth::user()->washer))
                                 @if(\Illuminate\Support\Facades\Auth::user()->washer==3)
                                 <li style="display: block;">
                                 <a href="{{url('washers')}}" class="card tile text-dark">
@@ -110,7 +115,10 @@
                                 </a>
                             </li>
                                 @endif
+                                @endif
 
+
+                                    @if(isset(\Illuminate\Support\Facades\Auth::user()->payments))
                                 @if(\Illuminate\Support\Facades\Auth::user()->payments==2)
                                 <li style="display: block;">
                                 <a href="{{url('payments')}}" class="card tile text-dark">
@@ -122,7 +130,10 @@
                                 </a>
                             </li>
                                 @endif
+                                @endif
 
+
+                                    @if(isset(\Illuminate\Support\Facades\Auth::user()->charges))
                                 @if(\Illuminate\Support\Facades\Auth::user()->charges==1)
                                 <li style="display: block;">
                                 <a href="{{url('charges')}}" class="card tile text-dark">
@@ -134,7 +145,10 @@
                                 </a>
                             </li>
                                 @endif
+                                @endif
 
+
+                                    @if(isset(\Illuminate\Support\Facades\Auth::user()->users))
                                 @if(\Illuminate\Support\Facades\Auth::user()->users==5)
                                 <li style="display: block;">
                                 <a href="{{url('users')}}" class="card tile text-dark">
@@ -145,6 +159,7 @@
                                     </div>
                                 </a>
                             </li>
+                                @endif
                                 @endif
 
                         </ul>

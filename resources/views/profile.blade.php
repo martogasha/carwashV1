@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Users-Carwash</title>
+    <title>{{\Illuminate\Support\Facades\Auth::user()->name}} Profile-Carwash</title>
 
     <link type="image/x-icon" href="assets/img/favicon.png" rel="icon">
 
@@ -73,7 +73,7 @@
                     <li class="">
                         <a href="{{url('charges')}}">Charges</a>
                     </li>
-                    <li class="active">
+                    <li class="">
                         <a href="{{url('users')}}">Users</a>
                     </li>
 
@@ -119,11 +119,6 @@
 
                 <div class="appointment-tab" style="text-align: center">
 
-                    <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{url('addUsers')}}">Add User</a>
-                        </li>
-                    </ul>
 
 
                 </div>
@@ -135,7 +130,7 @@
                             <nav class="user-tabs mb-4">
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Users</a>
+                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Edit <b style="color: black">{{\Illuminate\Support\Facades\Auth::user()->name}}</b> Profile</a>
                                     </li>
 
                                 </ul>
@@ -143,38 +138,39 @@
 
 
                             <div class="tab-content pt-0">
-
-                                <div id="pat_appointments" class="tab-pane fade show active">
-                                    <div class="card card-table mb-0">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover table-center mb-0">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Email</th>
-                                                        <th></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($washers as $washer)
-                                                        <tr>
-                                                            <td>{{$washer->name}}</td>
-                                                            <td>{{$washer->email}}</td>
-                                                            <td class="text-end">
-                                                                    <a class="btn btn-sm bg-success-light" href="{{url('editUser',$washer->id)}}">Edit</a>
-
-                                                                <a class="btn btn-sm bg-success-light view" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#delete_user">Delete</a>
-
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                <div class="modal-body">
+                                    <form action="{{url('updateProfile')}}" method="post">
+                                        @csrf
+                                        <input type="hidden" value="{{\Illuminate\Support\Facades\Auth::id()}}" name="user_id">
+                                    <div>
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" name="name" value="{{\Illuminate\Support\Facades\Auth::user()->name}}" placeholder="Input Name" id="first_na" required>
                                         </div>
                                     </div>
+                                    <div>
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            <input type="email" class="form-control" name="email" value="{{\Illuminate\Support\Facades\Auth::user()->email}}" placeholder="Input Email" id="add_phone" required>
+                                        </div>
+                                    </div>
+                                        <div>
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input type="password" class="form-control" name="password" placeholder="Input Password" id="pass">
+                                        </div>
+                                    </div>
+                                        <div>
+                                        <div class="form-group">
+                                            <label>Confirm Password</label>
+                                            <input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword">
+                                        </div>
+                                    </div>
+                                        <div id="CheckPasswordMatch">
+                                        </div>
+                                    <button type="submit" class="btn btn-danger" id="saveButton">Save</button>
+                                    </form>
+
                                 </div>
 
                             </div>
@@ -187,18 +183,38 @@
     </div>
 
 </div>
-<div class="modal fade custom-modal" id="delete_user">
+<div class="modal fade custom-modal" id="appt_details">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">ARE YOU SURE WANT TO DELETE <span id="ttt" style="color: red"></span></h5>
+                <h5 class="modal-title">Add User</h5>
             </div>
-            <form action="{{url('deleteUser')}}" method="post">
+            <form action="{{url('addWashers')}}" method="post">
                 @csrf
-                <input type="hidden" name="id" id="user_id">
                 <div class="modal-body">
 
-                    <button type="submit" class="btn btn-danger" id="saveButton">Delete</button>
+                    <div>
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" name="first_name" placeholder="First Name" id="first_na" required>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" name="last_name" placeholder="Last Name" id="last_na" required>
+                            <span style="color: red" id="name_verification"><b>Name Already Exist</b></span>
+
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" class="form-control" name="phone" placeholder="Phone Number" id="add_phone" required>
+                            <span style="color: red" id="phone_verification"><b>Phone Number Already Exist</b></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger" id="saveButton">Save</button>
 
                 </div>
             </form>
@@ -244,6 +260,15 @@
 <!-- Mirrored from doccure-laravel.dreamguystech.com/template-cardiology/public/patient-dashboard by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 18 Oct 2022 14:55:09 GMT -->
 </html>
 <script>
+    $('#confirmPassword').keyup(function () {
+        var password = $('#pass').val();
+        var confirmPassword = $('#confirmPassword').val();
+        if (password != confirmPassword)
+            $('#CheckPasswordMatch').html('Password Dont Match')
+        else
+            $('#CheckPasswordMatch').html('Password Match')
+
+    });
     $('#phone_verification').hide();
     $('#name_verification').hide();
 
@@ -251,7 +276,7 @@
         $value = $(this).attr('id');
         $.ajax({
             type:"get",
-            url:"{{url('deleteUser')}}",
+            url:"{{url('editWasher')}}",
             data:{'id':$value},
             success:function (data) {
                 getResponse(data);
@@ -268,8 +293,11 @@
     });
 
     function getResponse(data) {
-        $('#ttt').text(data.name);
-        $('#user_id').val(data.id);
+        $('#washer_id').val(data.id);
+        $('#first_name').val(data.first_name);
+        $('#last_name').val(data.last_name);
+        $('#phone').val(data.phone);
+        $('#editModalTitle').text(data.first_name+' '+data.last_name);
 
     }
     $('#add_phone').on('keyup',function () {

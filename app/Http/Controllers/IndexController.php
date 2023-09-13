@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Washer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class IndexController extends Controller
 {
@@ -296,6 +297,40 @@ class IndexController extends Controller
         $edit->car_amount = $request->input('car_amount');
         $edit->save();
         return redirect()->back()->with('success','CAR CHARGE EDITED SUCCESS');
+    }
+    public function deleteCarlist(Request $request){
+        $output = "";
+        $car = Carlist::find($request->id);
+        $output = $car;
+        return response($output);
+    }
+    public function deleteWasher(Request $request){
+        $output = "";
+        $car = Washer::find($request->id);
+        $output = $car;
+        return response($output);
+    }
+    public function dWashers(Request $request){
+        $car = Washer::find($request->washerId);
+        $car->delete();
+        return redirect()->back()->with('success','WASHER DELETED SUCCESS');
+    }
+    public function profile(){
+        return view('profile');
+    }
+    public function updateProfile(Request $request){
+        $profile = User::find($request->user_id);
+        $profile->name = $request->name;
+        $profile->email = $request->email;
+        $profile->password = Hash::make($request->password);
+        $profile->save();
+        return redirect()->back()->with('success','PROFILE DETAILS UPDATED SUCCESS');
+
+    }
+    public function deleteCar(Request $request){
+        $car = Carlist::find($request->carId);
+        $car->delete();
+        return redirect()->back()->with('success','CAR DELETED SUCCESS');
     }
     public function eWashers(Request $request){
         $edit = Washer::find($request->id);

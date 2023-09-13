@@ -130,6 +130,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <a class="dropdown-item" href="{{url('profile')}}">Profile</a>
+
             <form action="{{url('addCharge')}}" method="post">
                 @csrf
                 <div class="modal-body">
