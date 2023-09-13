@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Washers-Carwash</title>
+    <title>Users-Carwash</title>
 
     <link type="image/x-icon" href="assets/img/favicon.png" rel="icon">
 
@@ -64,7 +64,7 @@
                     <li class="">
                         <a href="{{url('cars')}}">Cars</a>
                     </li>
-                    <li class="active">
+                    <li class="">
                         <a href="{{url('washers')}}">Washers</a>
                     </li>
                     <li class="">
@@ -73,7 +73,7 @@
                     <li class="">
                         <a href="{{url('charges')}}">Charges</a>
                     </li>
-                    <li class="">
+                    <li class="active">
                         <a href="{{url('users')}}">Users</a>
                     </li>
 
@@ -119,7 +119,7 @@
 
                     <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#appt_details">Add Washers</a>
+                            <a class="nav-link active" href="{{url('addUsers')}}">Add User</a>
                         </li>
                     </ul>
 
@@ -133,7 +133,7 @@
                             <nav class="user-tabs mb-4">
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Washers</a>
+                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Users</a>
                                     </li>
 
                                 </ul>
@@ -150,22 +150,20 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Name</th>
-                                                        <th>Phone</th>
-                                                        <th>Rate</th>
+                                                        <th>Email</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     @foreach($washers as $washer)
                                                         <tr>
-                                                            <td>{{$washer->first_name}} {{$washer->last_name}}</td>
-                                                            <td>{{$washer->phone}}</td>
-                                                            <td>{{\App\Models\Rate::first()->rate}}%</td>
+                                                            <td>{{$washer->name}}</td>
+                                                            <td>{{$washer->email}}</td>
                                                             <td class="text-end">
-                                                                <div class="table-action">
-                                                                    <a class="btn btn-sm bg-success-light view" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#edit_washer">Edit</a>
+                                                                    <a class="btn btn-sm bg-success-light" href="{{url('editUser',$washer->id)}}">Edit</a>
 
-                                                                </div>
+                                                                <a class="btn btn-sm bg-success-light view" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#delete_user">Delete</a>
+
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -187,80 +185,18 @@
     </div>
 
 </div>
-<div class="modal fade custom-modal" id="appt_details">
+<div class="modal fade custom-modal" id="delete_user">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Washers</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">ARE YOU SURE WANT TO DELETE <span id="ttt" style="color: red"></span></h5>
             </div>
-            <form action="{{url('addWashers')}}" method="post">
+            <form action="{{url('deleteUser')}}" method="post">
                 @csrf
+                <input type="hidden" name="id" id="user_id">
                 <div class="modal-body">
 
-                    <div>
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" name="first_name" placeholder="First Name" id="first_na" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" name="last_name" placeholder="Last Name" id="last_na" required>
-                            <span style="color: red" id="name_verification"><b>Name Already Exist</b></span>
-
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" class="form-control" name="phone" placeholder="Phone Number" id="add_phone" required>
-                            <span style="color: red" id="phone_verification"><b>Phone Number Already Exist</b></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-danger" id="saveButton">Save</button>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade custom-modal" id="edit_washer">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit <span id="editModalTitle" style="color:red;"></span></h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="{{url('eWashers')}}" method="post">
-                @csrf
-                <input type="hidden" name="id" id="washer_id">
-                <div class="modal-body">
-
-                    <div>
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" class="form-control" name="phone" id="phone" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-danger">Save</button>
+                    <button type="submit" class="btn btn-danger" id="saveButton">Delete</button>
 
                 </div>
             </form>
@@ -313,7 +249,7 @@
         $value = $(this).attr('id');
         $.ajax({
             type:"get",
-            url:"{{url('editWasher')}}",
+            url:"{{url('deleteUser')}}",
             data:{'id':$value},
             success:function (data) {
                 getResponse(data);
@@ -330,11 +266,8 @@
     });
 
     function getResponse(data) {
-        $('#washer_id').val(data.id);
-        $('#first_name').val(data.first_name);
-        $('#last_name').val(data.last_name);
-        $('#phone').val(data.phone);
-        $('#editModalTitle').text(data.first_name+' '+data.last_name);
+        $('#ttt').text(data.name);
+        $('#user_id').val(data.id);
 
     }
     $('#add_phone').on('keyup',function () {

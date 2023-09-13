@@ -87,16 +87,20 @@
         <div class="container-fluid">
                     <div style="margin-bottom: 3em;" class="app">
                         <ul class="list" style="display: contents;">
-                            <li style="display: block;">
-                                <a href="{{url('cars')}}" class="card tile text-dark">
-                                    <div class="card-header topper"></div>
-                                    <div style="display: flex;background-color: #00d285" class="card-body flex-column">
-                                        <strong class="display-4 Title">CARS</strong>
-                                        <span class="fab fa-js-square fa-3x mb-auto mt-auto"></span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li style="display: block;">
+                            @if(\Illuminate\Support\Facades\Auth::user()->cars==4)
+                                <li style="display: block;">
+                                    <a href="{{url('cars')}}" class="card tile text-dark">
+                                        <div class="card-header topper"></div>
+                                        <div style="display: flex;background-color: #00d285" class="card-body flex-column">
+                                            <strong class="display-4 Title">CARS</strong>
+                                            <span class="fab fa-js-square fa-3x mb-auto mt-auto"></span>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endif
+
+                                @if(\Illuminate\Support\Facades\Auth::user()->washer==3)
+                                <li style="display: block;">
                                 <a href="{{url('washers')}}" class="card tile text-dark">
                                     <div class="card-header topper"></div>
                                     <div style="display: flex;background-color:blue" class="card-body flex-column">
@@ -105,7 +109,10 @@
                                     </div>
                                 </a>
                             </li>
-                            <li style="display: block;">
+                                @endif
+
+                                @if(\Illuminate\Support\Facades\Auth::user()->payments==2)
+                                <li style="display: block;">
                                 <a href="{{url('payments')}}" class="card tile text-dark">
                                     <div class="card-header topper"></div>
                                     <div style="display: flex;background-color:red" class="card-body flex-column">
@@ -114,7 +121,10 @@
                                     </div>
                                 </a>
                             </li>
-                            <li style="display: block;">
+                                @endif
+
+                                @if(\Illuminate\Support\Facades\Auth::user()->charges==1)
+                                <li style="display: block;">
                                 <a href="{{url('charges')}}" class="card tile text-dark">
                                     <div class="card-header topper"></div>
                                     <div style="display: flex;background-color:violet" class="card-body flex-column">
@@ -123,6 +133,19 @@
                                     </div>
                                 </a>
                             </li>
+                                @endif
+
+                                @if(\Illuminate\Support\Facades\Auth::user()->users==5)
+                                <li style="display: block;">
+                                <a href="{{url('users')}}" class="card tile text-dark">
+                                    <div class="card-header topper"></div>
+                                    <div style="display: flex;background-color:orange" class="card-body flex-column">
+                                        <strong class="display-4 Title">Users</strong>
+                                        <span class="fas fa-user-friends mb-auto fa-3x mt-auto"></span>
+                                    </div>
+                                </a>
+                            </li>
+                                @endif
 
                         </ul>
                     </div>

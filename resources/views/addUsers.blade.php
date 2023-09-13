@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Washers-Carwash</title>
+    <title>Add Users-Carwash</title>
 
     <link type="image/x-icon" href="assets/img/favicon.png" rel="icon">
 
@@ -64,7 +64,7 @@
                     <li class="">
                         <a href="{{url('cars')}}">Cars</a>
                     </li>
-                    <li class="active">
+                    <li class="">
                         <a href="{{url('washers')}}">Washers</a>
                     </li>
                     <li class="">
@@ -73,7 +73,7 @@
                     <li class="">
                         <a href="{{url('charges')}}">Charges</a>
                     </li>
-                    <li class="">
+                    <li class="active">
                         <a href="{{url('users')}}">Users</a>
                     </li>
 
@@ -117,11 +117,6 @@
 
                 <div class="appointment-tab" style="text-align: center">
 
-                    <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#appt_details">Add Washers</a>
-                        </li>
-                    </ul>
 
 
                 </div>
@@ -133,7 +128,7 @@
                             <nav class="user-tabs mb-4">
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Washers</a>
+                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Add User</a>
                                     </li>
 
                                 </ul>
@@ -141,40 +136,59 @@
 
 
                             <div class="tab-content pt-0">
+                                <div class="modal-body">
+                                    <form action="{{url('storeUser')}}" method="post">
+                                        @csrf
+                                    <div>
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" name="name" placeholder="Input Name" id="first_na" required>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            <input type="email" class="form-control" name="email" placeholder="Input Email" id="add_phone" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        <select class="form-control" name="role">
+                                                <option value="1">User</option>
+                                                <option value="0">Admin</option>
+                                        </select>
+                                    </div>
+                                    <div class="container" id="role_type">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="cars" value="4" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">Cars</label>
+                                                </div>
 
-                                <div id="pat_appointments" class="tab-pane fade show active">
-                                    <div class="card card-table mb-0">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover table-center mb-0">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Phone</th>
-                                                        <th>Rate</th>
-                                                        <th></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($washers as $washer)
-                                                        <tr>
-                                                            <td>{{$washer->first_name}} {{$washer->last_name}}</td>
-                                                            <td>{{$washer->phone}}</td>
-                                                            <td>{{\App\Models\Rate::first()->rate}}%</td>
-                                                            <td class="text-end">
-                                                                <div class="table-action">
-                                                                    <a class="btn btn-sm bg-success-light view" id={{$washer->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#edit_washer">Edit</a>
-
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-                                                    </tbody>
-                                                </table>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="washers" value="3" id="customCheck2">
+                                                    <label class="custom-control-label" for="customCheck2">Washers</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="payments" value="2" id="customCheck3">
+                                                    <label class="custom-control-label" for="customCheck3">Payments</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="charges" value="1" id="customCheck4">
+                                                    <label class="custom-control-label" for="customCheck4">Charges</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" name="users" value="0" id="customCheck5">
+                                                    <label class="custom-control-label" for="customCheck5">Users</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <button type="submit" class="btn btn-danger" id="saveButton">Save</button>
+                                    </form>
+
                                 </div>
 
                             </div>
@@ -191,10 +205,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Washers</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">Add User</h5>
             </div>
             <form action="{{url('addWashers')}}" method="post">
                 @csrf
@@ -222,45 +233,6 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger" id="saveButton">Save</button>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade custom-modal" id="edit_washer">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit <span id="editModalTitle" style="color:red;"></span></h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="{{url('eWashers')}}" method="post">
-                @csrf
-                <input type="hidden" name="id" id="washer_id">
-                <div class="modal-body">
-
-                    <div>
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" class="form-control" name="phone" id="phone" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-danger">Save</button>
 
                 </div>
             </form>

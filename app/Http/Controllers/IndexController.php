@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Carlist;
 use App\Models\Charge;
 use App\Models\Rate;
+use App\Models\User;
 use App\Models\Washer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,6 +65,62 @@ class IndexController extends Controller
         return view('washers',[
             'washers'=>$washers
         ]);
+    }
+    public function users(){
+        $washers = User::all();
+        return view('users',[
+            'washers'=>$washers
+        ]);
+    }
+    public function addUsers(){
+        return view('addUsers');
+    }
+    public function deleteUser(Request $request){
+        $output = "";
+        $user = User::find($request->id);
+        $output = $user;
+        return response($output);
+    }
+    public function deleteU(Request $request){
+        $user = User::find($request->id);
+        $user->delete();
+        return redirect()->back()->with('success','USER DELETED SUCCESS');
+
+    }
+    public function storeUser(Request $request){
+        $user = User::create([
+            'role' => $request->input('role'),
+            'name' => $request->input('name'),
+           'email' => $request->input('email'),
+           'password' => '123456',
+           'cars' => $request->input('cars'),
+           'washer' => $request->input('washers'),
+           'payments' => $request->input('payments'),
+           'charges' => $request->input('charges'),
+           'users' => $request->input('users'),
+        ]);
+        return redirect(url('users'))->with('success','USER ADDED SUCCESS DEFAULT PASSWORD 123456');
+    }
+    public function editUsers(Request $request){
+        $user = User::find($request->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->cars = $request->cars;
+        $user->washer = $request->washers;
+        $user->payments = $request->payments;
+        $user->charges = $request->charges;
+        $user->users = $request->users;
+        $user->save();
+        return redirect(url('users'))->with('success','USER ADDED SUCCESS');
+
+    }
+    public function editUser($id){
+        $user = User::find($id);
+        return view('editUsers',[
+            'user'=>$user
+        ]);
+
     }
     public function filterDate(Request $request){
         $from = date('d/m/Y', strtotime($request->from));
@@ -231,7 +288,7 @@ class IndexController extends Controller
         $rate = Rate::find('1');
         $rate->rate = $request->input('rate');
         $rate->save();
-        return redirect()->back()->with('success','CAR CHARGE EDITED SUCCESS');
+        return redirect()->back()->with('success','WASHER RATE UPDATED SUCCESS');
     }
     public function eCharge(Request $request){
         $edit = Charge::find($request->id);

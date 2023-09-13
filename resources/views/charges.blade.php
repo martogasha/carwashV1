@@ -73,6 +73,9 @@
                     <li class="active">
                         <a href="{{url('charges')}}">Charges</a>
                     </li>
+                    <li class="">
+                        <a href="{{url('users')}}">Users</a>
+                    </li>
 
                 </ul>
             </div>
@@ -107,73 +110,12 @@
 
                     <div class="appointment-tab" style="text-align: center">
 
-                        <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#appt_details">Add Vehicle</a>
-                            </li>
-                            <li class="nav-item" style="padding-left: 150px">
                                 <a class="btn btn-success" href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#edit_rate">Edit Rate</a>
-                            </li>
-                        </ul>
                         <p>Washers Payment Rate</p><span style="font-size: 30px"><b>{{$rate->rate}}</b>%</span>
 
                     </div>
                             @include('flash-message')
 
-                <div class="col-md-12 col-lg-12 col-xl-12">
-                    <div class="card">
-                        <div class="card-body pt-0">
-
-                            <nav class="user-tabs mb-4">
-                                <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#pat_appointments" data-bs-toggle="tab">Car Charges</a>
-                                    </li>
-                                </ul>
-                            </nav>
-
-
-                            <div class="tab-content pt-0">
-
-                                <div id="pat_appointments" class="tab-pane fade show active">
-                                    <div class="card card-table mb-0">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover table-center mb-0">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Car Type</th>
-                                                        <th>Amount</th>
-                                                        <th></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($charges as $charge)
-                                                        <tr>
-                                                            <td>{{$charge->car_type}}</td>
-                                                            <td>Ksh {{$charge->car_amount}}</td>
-                                                            <td class="text-end">
-                                                                <div class="table-action">
-                                                                    <a class="btn btn-sm bg-success-light view" id={{$charge->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#edit_charge">Edit</a>
-
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
