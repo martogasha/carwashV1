@@ -71,9 +71,6 @@
                         <a href="{{url('payments')}}">Payments</a>
                     </li>
                     <li class="">
-                        <a href="{{url('charges')}}">Charges</a>
-                    </li>
-                    <li class="">
                         <a href="{{url('users')}}">Users</a>
                     </li>
 

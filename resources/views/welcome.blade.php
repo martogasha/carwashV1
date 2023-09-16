@@ -132,22 +132,6 @@
                                 @endif
                                 @endif
 
-
-                                    @if(isset(\Illuminate\Support\Facades\Auth::user()->charges))
-                                @if(\Illuminate\Support\Facades\Auth::user()->charges==1)
-                                <li style="display: block;">
-                                <a href="{{url('charges')}}" class="card tile text-dark">
-                                    <div class="card-header topper"></div>
-                                    <div style="display: flex;background-color:violet" class="card-body flex-column">
-                                        <strong class="display-4 Title">CHARGES</strong>
-                                        <span class="fas fa-user-friends mb-auto fa-3x mt-auto"></span>
-                                    </div>
-                                </a>
-                            </li>
-                                @endif
-                                @endif
-
-
                                     @if(isset(\Illuminate\Support\Facades\Auth::user()->users))
                                 @if(\Illuminate\Support\Facades\Auth::user()->users==5)
                                 <li style="display: block;">

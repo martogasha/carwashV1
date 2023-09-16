@@ -20,8 +20,13 @@ class CreateCarlistsTable extends Migration
             $table->string('phone')->nullable();
             $table->integer('charge_id')->nullable();
             $table->integer('washer_id');
+            $table->integer('washerOne_id')->nullable();
             $table->integer('amount');
+            $table->integer('rate');
+            $table->integer('rate_one')->nullable();
             $table->integer('discountAmount');
+            $table->integer('discountAmountOne')->nullable();
+            $table->integer('totalDiscount');
             $table->integer('payment_method')->nullable();
             $table->timestamps();
         });

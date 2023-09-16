@@ -71,9 +71,6 @@
                         <a href="{{url('payments')}}">Payments</a>
                     </li>
                     <li class="">
-                        <a href="{{url('charges')}}">Charges</a>
-                    </li>
-                    <li class="">
                         <a href="{{url('users')}}">Users</a>
                     </li>
 
@@ -200,7 +197,15 @@
                                                                 <td>N/A</td>
 
                                                             @endif
-                                                            <td>{{$car->washer->first_name}} {{$car->washer->last_name}}</td>
+                                                            @if($car->washerOne_id!=null)
+                                                                <td>{{$car->washer->first_name}} {{$car->washer->last_name}}
+                                                                <br>
+                                                                    {{$car->washerOne->first_name}} {{$car->washerOne->last_name}}
+                                                                </td>
+                                                            @else
+                                                                <td>{{$car->washer->first_name}} {{$car->washer->last_name}}</td>
+
+                                                            @endif
                                                             <td>Ksh {{$car->amount}}</td>
                                                             @if($car->payment_method)
                                                                 @if($car->payment_method==1)
@@ -213,7 +218,7 @@
                                                                 <td>Pending</td>
 
                                                             @endif
-                                                            @if(\Illuminate\Support\Facades\Auth::user()->role==0)
+                                                            @if(\Illuminate\Support\Facades\Auth::user()->role==0 && $car->payment_method==null)
                                                                 <td><a class="btn btn-sm bg-success-light del" id={{$car->id}} href="#upcoming-appointments" data-bs-toggle="modal" data-bs-target="#delete_carlist">Delete</a></td>
 
                                                             @endif
@@ -272,7 +277,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Car</h5>
+                <h5 class="modal-title">Book Car</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -294,17 +299,43 @@
                         </div>
                     </div>
 
-                    <div id="paymentMethod">
+                    <div id="washer">
                         <div class="form-group">
-                            <label>Washer</label>
-                            <select class="form-control select" name="washer_id">
+                            <label>Washer 1</label>
+                            <select class="form-control select" name="washer_id" id="washer_select">
                                 @foreach($washers as $washer)
                                     <option value="{{$washer->id}}">{{$washer->first_name}} {{$washer->last_name}}</option>
                                 @endforeach
 
                             </select>
                         </div>
+                        <div>
+                            <div class="form-group">
+                                <label>Rate %</label>
+                                <input type="text" class="form-control" name="rate" id="rateN" required>
+                            </div>
+                        </div>
                     </div>
+                    <div id="washer_one">
+                        <div class="form-group">
+                            <label>Washer 2</label>
+                            <select class="form-control select" name="washer_id_one" id="washer_select_one">
+                                @foreach($washers as $washer)
+                                    <option value="{{$washer->id}}">{{$washer->first_name}} {{$washer->last_name}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label>Rate %</label>
+                                <input type="text" class="form-control" name="rate_one" id="rateN_one">
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="btn btn-dark" id="add_washer_button">Add Washer</span>
+                    <span class="btn btn-dark" id="remove_washer_button">Remove</span>
                     <div>
                         <div class="form-group">
                             <label>Amount</label>
@@ -377,6 +408,48 @@
 <!-- Mirrored from doccure-laravel.dreamguystech.com/template-cardiology/public/patient-dashboard by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 18 Oct 2022 14:55:09 GMT -->
 </html>
 <script>
+$(document).ready(function () {
+    $('#washer_one').hide();
+    $('#remove_washer_button').hide();
+    $('#add_washer_button').show();
+});
+$(document).ready(myFunction());
+function myFunction() {
+    var x = document.getElementById("washer_select_one");
+    if (window.getComputedStyle(x).display === "none") {
+        showButton()
+    }
+    else {
+        hideButton()
+    }
+}
+function hideButton(){
+    $('#add_washer_button').hide();
+    $('#remove_washer_button').show();
+}
+function showButton(){
+    $('#add_washer_button').show();
+    $('#remove_washer_button').hide();
+
+}
+    $('#remove_washer_button').click(function () {
+        $('#washer_one').hide();
+        $('#washer_select_one').val('');
+        $('#rateN_one').val('');
+        $('#remove_washer_button').hide();
+        $('#add_washer_button').show();
+
+
+    });
+$('#add_washer_button').click(function () {
+        $('#washer_one').show();
+        $('#remove_washer_button').show();
+        $('#add_washer_button').hide();
+
+
+    });
+
+
     $(document).on('click','.view',function () {
         $value = $(this).attr('id');
         $.ajax({
@@ -402,6 +475,58 @@
 
         $('#editModalTitle').text(data.number_plate);
         $('#car_id').val(data.id);
+
+
+    }
+    $('#washer_select').on('change',function () {
+        $value = $(this).val();
+        $.ajax({
+            type:"get",
+            url:"{{url('getRate')}}",
+            data:{'id':$value},
+            success:function (data) {
+                getRespons(data);
+                console.log(data);
+
+            },
+            error:function (error) {
+                console.log(error)
+                alert('error')
+
+            }
+
+        });
+    });
+    var dato;
+    function getRespons(response) {
+        dato = response;
+        $('#rateN').val(dato.rate);
+
+
+    }
+    $('#washer_select_one').on('change',function () {
+        $value = $(this).val();
+        $.ajax({
+            type:"get",
+            url:"{{url('getRate')}}",
+            data:{'id':$value},
+            success:function (data) {
+                getResponsOne(data);
+                console.log(data);
+
+            },
+            error:function (error) {
+                console.log(error)
+                alert('error')
+
+            }
+
+        });
+    });
+    var da;
+    function getResponsOne(response) {
+        da = response;
+        $('#rateN_one').val(da.rate);
 
 
     }
@@ -485,4 +610,5 @@
     $('#myform_phone').on('keyup',function () {
         validateForm();
     });
+
 </script>

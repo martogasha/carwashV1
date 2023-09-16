@@ -71,9 +71,6 @@
                         <a href="{{url('payments')}}">Payments</a>
                     </li>
                     <li class="">
-                        <a href="{{url('charges')}}">Charges</a>
-                    </li>
-                    <li class="">
                         <a href="{{url('users')}}">Users</a>
                     </li>
 
@@ -162,7 +159,7 @@
                                                         <tr>
                                                             <td>{{$washer->first_name}} {{$washer->last_name}}</td>
                                                             <td>{{$washer->phone}}</td>
-                                                            <td>{{\App\Models\Rate::first()->rate}}%</td>
+                                                            <td>{{$washer->rate}}%</td>
                                                             @if(\Illuminate\Support\Facades\Auth::user()->role==0)
                                                                 <td class="text-end">
                                                                     <div class="table-action">
@@ -227,6 +224,12 @@
                             <span style="color: red" id="phone_verification"><b>Phone Number Already Exist</b></span>
                         </div>
                     </div>
+                    <div>
+                        <div class="form-group">
+                            <label>Rate %</label>
+                            <input type="text" class="form-control" name="rate" placeholder="Rate %" id="rate" required>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-danger" id="saveButton">Save</button>
 
                 </div>
@@ -266,6 +269,12 @@
                             <input type="text" class="form-control" name="phone" id="phone" required>
                         </div>
                     </div>
+                    <div>
+                        <div class="form-group">
+                            <label>Rate %</label>
+                            <input type="text" class="form-control" name="rate" id="rateGet" required>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-danger">Save</button>
 
                 </div>
@@ -286,7 +295,7 @@
                 @csrf
                 <input type="hidden" name="washerId" id="washerId">
                 <div class="modal-body">
-                    <button type="submit" class="btn btn-danger">Save</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
 
                 </div>
             </form>
@@ -360,6 +369,7 @@
         $('#first_name').val(data.first_name);
         $('#last_name').val(data.last_name);
         $('#phone').val(data.phone);
+        $('#rateGet').val(data.rate);
         $('#editModalTitle').text(data.first_name+' '+data.last_name);
 
     }    $(document).on('click','.del',function () {

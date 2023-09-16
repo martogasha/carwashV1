@@ -43,6 +43,7 @@ Route::get('editCharge', [IndexController::class, 'editCharge']);
 Route::get('deleteWasher', [IndexController::class, 'deleteWasher']);
 Route::get('deleteCarlist', [IndexController::class, 'deleteCarlist']);
 Route::get('editRate', [IndexController::class, 'editRate']);
+Route::get('getRate', [IndexController::class, 'getRate']);
 Route::get('editWasher', [IndexController::class, 'editWasher']);
 Route::get('getAmount', [IndexController::class, 'getAmount']);
 Route::get('getWasher', [IndexController::class, 'getWasher']);

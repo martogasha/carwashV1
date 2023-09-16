@@ -70,9 +70,6 @@
                     <li class="active">
                         <a href="{{url('payments')}}">Payments for <b style="color: blue">{{$wash->first_name}}</b></a>
                     </li>
-                    <li class="">
-                        <a href="{{url('charges')}}">Charges</a>
-                    </li>
                 </ul>
             </div>
             <ul class="nav header-navbar-rht">
@@ -142,22 +139,11 @@
 <br>
                             <nav>
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
-                                    <li class="nav-item" id="payNav">
-                                        <a href="#pat_appointments" data-bs-toggle="tab" style="color: red"><span style="color: black;font-size: larger"><i style="font-size: smaller">Total Amount:<br>Ksh</i> <b>{{$total}}</b></span></a>
-                                    </li>
                                     <li class="nav-item">
                                         <a href="#" data-bs-toggle="tab" style="color: blue">{{$wash->first_name}} {{$wash->last_name}} <span style="color: black;font-size: larger"><i style="font-size: smaller">Paid:<br>Ksh</i> <b>{{$paid}}</b></span></a>
                                     </li>
-                                </ul>
-                            </nav>
-                            <br>
-                            <nav>
-                                <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                                     <li class="nav-item">
-                                        <a href="#" data-bs-toggle="tab" style="color: red">MPESA <span style="color: black;font-size: larger"><i style="font-size: smaller"><br>Ksh</i> <b>{{$m}}</b></span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" data-bs-toggle="tab" style="color: blue">CASH <span style="color: black;font-size: larger"><i style="font-size: smaller"><br>Ksh</i> <b>{{$c}}</b></span></a>
+                                        <a href="#" data-bs-toggle="tab" style="color: blue">{{$wash->first_name}} {{$wash->last_name}} <span style="color: black;font-size: larger"><i style="font-size: smaller">Pending:<br>Ksh</i> <b>{{$pending}}</b></span></a>
                                     </li>
                                 </ul>
                             </nav>
@@ -176,6 +162,7 @@
                                                         <th>Number Plate</th>
                                                         <th>Washer</th>
                                                         <th>Amount</th>
+                                                        <th>Paid</th>
                                                         <th>Payment Method</th>
                                                     </tr>
                                                     </thead>
@@ -184,13 +171,43 @@
                                                         <tr>
                                                             <td>{{$car->date}}</td>
                                                             <td>{{$car->number_plate}}</td>
-                                                            <td>{{$car->washer->first_name}} {{$car->washer->last_name}}</td>
+                                                            @if($car->washerOne_id!=null)
+                                                                <td>
+                                                                    {{$car->washer->first_name}} {{$car->washer->last_name}}(<b>{{$car->rate}}%</b>)
+                                                                    <br>
+                                                                    {{$car->washerOne->first_name}} {{$car->washerOne->last_name}}(<b>{{$car->rate_one}}%</b>)
+                                                                </td>
+
+                                                            @else
+                                                                <td>{{$car->washer->first_name}} {{$car->washer->last_name}}(<b>{{$car->rate}}%</b>)</td>
+
+                                                            @endif
                                                             <td>Ksh {{$car->amount}}</td>
+                                                            <td>
+                                                                @if($car->washer_id==$id)
+                                                                    Ksh {{$car->discountAmount}}
+                                                                @else
+                                                                    <i style="text-decoration: line-through">Ksh {{$car->discountAmount}}</i>
+
+                                                                @endif
+                                                                <br>
+                                                                    @if($car->washerOne_id==$id)
+                                                                    Ksh {{$car->discountAmountOne}}
+                                                                    @elseif($car->washerOne_id==null)
+                                                                    @else
+                                                                         <i style="text-decoration: line-through">Ksh {{$car->discountAmountOne}}</i>
+
+                                                                    @endif
+
+                                                            </td>
                                                             @if($car->payment_method==1)
                                                                 <td><span class="badge rounded-pill bg-success-light">Mpesa</span></td>
 
-                                                            @else
-                                                                <td><span class="badge rounded-pill bg-primary-light">Cash</span></td>
+                                                            @elseif($car->payment_method==2)
+                                                            <td><span class="badge rounded-pill bg-primary-light">Cash</span></td>
+
+                                                        @else
+                                                                <td>Pending</td>
 
                                                             @endif
 
@@ -219,7 +236,7 @@
                                                     <tbody>
                                                     @foreach($washers as $washer)
                                                         <tr>
-                                                            <td>{{$washer->first_name}} {{$washer->last_name}}</td>
+                                                            <td>{{$washer->first_name}} {{$washer->last_name}}(<b>{{$washer->rate}}%</b>)</td>
                                                             <td>{{$washer->phone}}</td>
                                                             <td>{{$washer->rate}}%</td>
                                                             <td>Ksh {{$washer->amount}}</td>
@@ -251,7 +268,7 @@
                                                         <tr>
                                                             <td>{{$mpesa->date}}</td>
                                                             <td>{{$mpesa->number_plate}}</td>
-                                                            <td>{{$mpesa->washer->first_name}} {{$mpesa->washer->last_name}}</td>
+                                                            <td>{{$mpesa->washer->first_name}} {{$mpesa->washer->last_name}}(<b>{{$mpesa->washer->rate}}%</b>)</td>
                                                             <td>Ksh {{$mpesa->amount}}</td>
                                                             @if($mpesa->payment_method==1)
                                                                 <td><span class="badge rounded-pill bg-success-light">Mpesa</span></td>
@@ -289,7 +306,7 @@
                                                         <tr>
                                                             <td>{{$cash->date}}</td>
                                                             <td>{{$cash->number_plate}}</td>
-                                                            <td>{{$cash->washer->first_name}} {{$cash->washer->last_name}}</td>
+                                                            <td>{{$cash->washer->first_name}} {{$cash->washer->last_name}}(<b>{{$cash->washer->rate}}%</b>)</td>
                                                             <td>Ksh {{$cash->amount}}</td>
                                                             @if($cash->payment_method==1)
                                                                 <td><span class="badge rounded-pill bg-success-light">Mpesa</span></td>

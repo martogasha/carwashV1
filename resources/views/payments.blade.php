@@ -71,9 +71,6 @@
                         <a href="{{url('payments')}}">Payments</a>
                     </li>
                     <li class="">
-                        <a href="{{url('charges')}}">Charges</a>
-                    </li>
-                    <li class="">
                         <a href="{{url('users')}}">Users</a>
                     </li>
                 </ul>
@@ -169,7 +166,10 @@
                             <nav>
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                                     <li class="nav-item" id="cashNav">
-                                        <a href="#pat_cash" data-bs-toggle="tab" style="color: blue" id="button_cash">Pending Payment <span style="color: black;font-size: larger"><i style="font-size: smaller"><br>Ksh</i> <b>{{$p}}</b></span></a>
+                                        <a href="#pat_cash" data-bs-toggle="tab" style="color:green" id="button_cash">Pending Payment <span style="color: black;font-size: larger"><i style="font-size: smaller"><br>Ksh</i> <b>{{$p}}</b></span></a>
+                                    </li>
+                                    <li class="nav-item" id="cashNav">
+                                        <a href="#pat_cash" data-bs-toggle="tab" style="color: green" id="button_cash">Pending Worker Salary <span style="color: black;font-size: larger"><i style="font-size: smaller"><br>Ksh</i> <b>{{$pend}}</b></span></a>
                                     </li>
                                 </ul>
                             </nav>
@@ -196,7 +196,18 @@
                                                         <tr>
                                                             <td>{{$car->date}}</td>
                                                             <td>{{$car->number_plate}}</td>
-                                                            <td><a href="{{url('washerDetail',$car->washer->id)}}">{{$car->washer->first_name}} {{$car->washer->last_name}}</a></td>
+                                                            @if($car->rate_one!=null)
+                                                                <td>
+                                                                    <a href="{{url('washerDetail',$car->washer->id)}}">{{$car->washer->first_name}} {{$car->washer->last_name}}(<b>{{$car->rate}}%</b>)</a>
+                                                                    <br>
+                                                                    <a href="{{url('washerDetail',$car->washerOne->id)}}">{{$car->washerOne->first_name}} {{$car->washerOne->last_name}}(<b>{{$car->rate_one}}%</b>)</a>
+                                                                </td>
+                                                            @else
+                                                                <td>
+                                                                    <a href="{{url('washerDetail',$car->washer->id)}}">{{$car->washer->first_name}} {{$car->washer->last_name}}(<b>{{$car->rate}}%</b>)</a>
+                                                                </td>
+                                                            @endif
+
                                                             <td>Ksh {{$car->amount}}</td>
                                                             @if($car->payment_method==1)
                                                                 <td><span class="badge rounded-pill bg-success-light">Mpesa</span></td>
@@ -236,7 +247,7 @@
                                                         <tr>
                                                             <td><a href="{{url('washerDetail',$washer->id)}}">{{$washer->first_name}} {{$washer->last_name}}</a></td>
                                                             <td>{{$washer->phone}}</td>
-                                                            <td>{{\App\Models\Rate::first()->rate}}%</td>
+                                                            <td>{{$washer->rate}}%</td>
                                                             <td>Ksh {{\App\Models\Carlist::where('washer_id',$washer->id)->sum('amount')}}</td>
                                                             <td>Ksh {{\App\Models\Carlist::where('washer_id',$washer->id)->sum('discountAmount')}}</td>
                                                         </tr>
