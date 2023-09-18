@@ -93,7 +93,7 @@ class IndexController extends Controller
             'role' => $request->input('role'),
             'name' => $request->input('name'),
            'email' => $request->input('email'),
-           'password' => '123456',
+           'password' => Hash::make('123456'),
            'cars' => $request->input('cars'),
            'washer' => $request->input('washers'),
            'payments' => $request->input('payments'),
